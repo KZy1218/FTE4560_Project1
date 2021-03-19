@@ -1,27 +1,18 @@
 import numpy as np
-import pandas as pd
-from knn import knn
-
-
-test = pd.read_csv('Bankruptcy/testing_zScore.csv', header=None)
-train = pd.read_csv('Bankruptcy/training_zScore.csv', header=None)
 
 
 def transform(data):
     result = []
     for i in range(len(data)):
-        result.append((data.loc[i, ][64], np.array(data.loc[i, ][:64])))
+        result.append([data.loc[i, ][64], np.array(data.loc[i, ][:64])])
     return result
-
-testing = transform(test)
-training = transform(train)
 
 
 def find_center(data):
     """
 
     :param data: [(label_1, data_1), (label_2, data_2), ...]
-    :return: center of each class in the form of
+    :return: center of each class in the form of dictionary
     """
     result = {}
     class_type = list(set([i[0] for i in data]))
@@ -32,9 +23,7 @@ def find_center(data):
                 count += 1
                 total = [sum(i) for i in list(zip(total, d[1]))]
         result[i] = [i / count for i in total]
-    print(result)
     return result
-
 
 
 def find_within_var(data):
@@ -59,4 +48,12 @@ def find_between_var(data):
         arr = np.array(class_center[j]) - np.array(sample_center)
         result += count * np.outer(arr, arr)
     return result
+
+
+def projector(between, within):
+    mat = np.matmul(np.linalg.pinv(within), between)
+    eigen = np.linalg.eig(mat)
+    max_index = np.argmax(eigen[0])
+    return eigen[1][max_index]
+
 
