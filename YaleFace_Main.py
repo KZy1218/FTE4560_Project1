@@ -15,9 +15,9 @@ def random_select(n):
         vec = random.sample(range(0, 11), n)
         for j in range(11):
             if j in vec:
-                train.append((labels[key][j], np.array(subjects[key][j])))
+                train.append([labels[key][j], np.array(subjects[key][j])])
             else:
-                test.append((labels[key][j], np.array(subjects[key][j])))
+                test.append([labels[key][j], np.array(subjects[key][j])])
     return test, train
 
 testing, training = random_select(8)
