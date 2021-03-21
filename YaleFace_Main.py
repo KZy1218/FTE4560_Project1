@@ -22,4 +22,4 @@ def random_select(n):
 
 testing, training = random_select(8)
 
-knn(1, testing, training)
+knn(3, testing, training)
